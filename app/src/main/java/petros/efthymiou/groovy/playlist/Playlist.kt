@@ -1,4 +1,4 @@
-package petros.efthymiou.groovy
+package petros.efthymiou.groovy.playlist
 
 /**
  * Created by Brandon Quintanilla on Nov/09/2022

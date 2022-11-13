@@ -2,6 +2,7 @@ package petros.efthymiou.groovy
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import petros.efthymiou.groovy.playlist.PlayListFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -10,7 +11,7 @@ class MainActivity : AppCompatActivity() {
 
         if(savedInstanceState ==null){
             supportFragmentManager.beginTransaction()
-                .add(R.id.container,PlayListFragment.newInstance())
+                .add(R.id.container, PlayListFragment.newInstance())
         }
     }
 }
