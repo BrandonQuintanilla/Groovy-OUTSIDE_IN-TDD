@@ -43,6 +43,21 @@ class PlayListViewModelShould : BaseUnitTest() {
         assertEquals(expected, viewModel.playlist.getValueForTest())
     }
 
+    @Test
+    fun emitErrorWhenReceiveError() {
+
+        runBlockingTest {
+            whenever(repository.getPlayList()).thenReturn(
+                flow {
+                    emit(Result.failure<List<Playlist>>(exception))
+                }
+            )
+        }
+        val viewModel = PlayLisViewModel(repository)
+        assertEquals(exception, viewModel.playlist.getValueForTest()!!.exceptionOrNull())
+        //Fails
+        // assertEquals(RuntimeException("Another one"), viewModel.playlist.getValueForTest()!!.exceptionOrNull())
+    }
 
     // Util
     private fun mocksuccessfulCase(): PlayLisViewModel {
