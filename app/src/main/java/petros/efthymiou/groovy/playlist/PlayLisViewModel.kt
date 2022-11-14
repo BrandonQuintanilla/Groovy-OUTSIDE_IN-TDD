@@ -6,8 +6,12 @@ import kotlinx.coroutines.launch
 
 class PlayLisViewModel constructor(private val repository: PlaylistRepository) : ViewModel() {
 
-    val playlist = liveData<Result<List<Playlist>>>(){
-        emitSource(repository.getPlayList().asLiveData())
+    val playlist = liveData<Result<List<Playlist>>>() {
+        emitSource(
+            repository
+                .getPlayList()
+                .asLiveData()
+        )
     }
 /*
     val playlist = MutableLiveData<Result<List<Playlist>>>()

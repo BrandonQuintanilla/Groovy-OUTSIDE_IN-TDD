@@ -10,8 +10,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         if(savedInstanceState ==null){
-            supportFragmentManager.beginTransaction()
+            supportFragmentManager
+                .beginTransaction()
                 .add(R.id.container, PlayListFragment.newInstance())
+                .commit()
         }
     }
 }
