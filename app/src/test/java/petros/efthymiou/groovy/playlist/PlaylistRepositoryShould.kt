@@ -26,7 +26,7 @@ class PlaylistRepositoryShould : BaseUnitTest() {
         val repository = PlaylistRepository(service)
 
         repository.getPlayList()
-        verify(service, times(1)).fetchPlayList()
+        verify(service, times(1)).fetchPlaylists()
     }
 
     @Test
@@ -42,7 +42,7 @@ class PlaylistRepositoryShould : BaseUnitTest() {
     }
 
     private fun mockFailureCase(): PlaylistRepository {
-        whenever(service.fetchPlayList())
+        whenever(service.fetchPlaylists())
             .thenReturn(flow {
                 emit(Result.failure<List<Playlist>>(exception))
             })
@@ -53,7 +53,7 @@ class PlaylistRepositoryShould : BaseUnitTest() {
 
     //Utils
     private fun mockSuccessfulCase(): PlaylistRepository {
-        whenever(service.fetchPlayList()).thenReturn(flow {
+        whenever(service.fetchPlaylists()).thenReturn(flow {
             emit(Result.success(playlist))
         })
 

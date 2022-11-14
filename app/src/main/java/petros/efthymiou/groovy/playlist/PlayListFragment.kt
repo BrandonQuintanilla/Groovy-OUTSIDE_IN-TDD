@@ -16,7 +16,7 @@ class PlayListFragment : Fragment() {
 
     lateinit var viewModel: PlayLisViewModel
     lateinit var viewModelFactory: PlayLisViewModelFactory
-    private val service= PlayListService()
+    private val service = PlayListService(object : PlaylistAPI {})
     private val repository = PlaylistRepository(service)
 
     override fun onCreateView(
@@ -28,9 +28,9 @@ class PlayListFragment : Fragment() {
         setupViewModel()
 
         viewModel.playlist.observe(this) { playlist ->
-            if(playlist.getOrNull() !=null ){
+            if (playlist.getOrNull() != null) {
                 setupList(view, playlist.getOrNull()!!)
-            }else{
+            } else {
                 //TODO
             }
         }
