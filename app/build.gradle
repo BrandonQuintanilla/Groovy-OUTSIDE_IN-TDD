@@ -38,6 +38,7 @@ android {
 
     testOptions {
         animationsDisabled = true
+        //unitTests.returnDefaultValues = true
     }
     buildFeatures {
         viewBinding true

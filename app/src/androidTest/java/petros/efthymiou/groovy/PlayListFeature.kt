@@ -52,27 +52,21 @@ class PlayListFeature {
                 withId(R.id.playlist_name),
                 isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 0))
             )
-        )
-            .check(matches(withText("Hard Rock Cafe")))
-            .check(matches(isDisplayed()))
+        ).check(matches(withText("Hard Rock Cafe"))).check(matches(isDisplayed()))
 
         onView(
             allOf(
                 withId(R.id.playlist_category),
                 isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 0))
             )
-        )
-            .check(matches(withText("rock")))
-            .check(matches(isDisplayed()))
+        ).check(matches(withText("rock"))).check(matches(isDisplayed()))
 
         onView(
             allOf(
                 withId(R.id.playlist_image),
-                isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 0))
+                isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 1))
             )
-        )
-            .check(matches(withDrawable(R.mipmap.playlist)))
-            .check(matches(isDisplayed()))
+        ).check(matches(withDrawable(R.mipmap.playlist))).check(matches(isDisplayed()))
     }
 
     @Test
@@ -86,6 +80,27 @@ class PlayListFeature {
         assertNotDisplayed(R.id.loader)
     }
 
+    @Test
+    fun displayRockImageForRockListItems() {
+        Thread.sleep(4000)
+
+        onView(
+            allOf(
+                withId(R.id.playlist_image),
+                isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 0))
+            )
+        ).check(matches(withDrawable(R.mipmap.rock))).check(matches(isDisplayed()))
+
+        onView(
+            allOf(
+                withId(R.id.playlist_image),
+                isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 3))
+            )
+        )
+            .check(matches(withDrawable(R.mipmap.rock)))
+            .check(matches(isDisplayed()))
+
+    }
 
     //utils
     fun nthChildOf(parentMatcher: Matcher<View>, childPosition: Int): Matcher<View> {
@@ -99,9 +114,9 @@ class PlayListFeature {
                 if (view.parent !is ViewGroup) return false
                 val parent = view.parent as ViewGroup
 
-                return (parentMatcher.matches(parent)
-                        && parent.childCount > childPosition
-                        && parent.getChildAt(childPosition) == view)
+                return (parentMatcher.matches(parent) && parent.childCount > childPosition && parent.getChildAt(
+                    childPosition
+                ) == view)
             }
         }
     }

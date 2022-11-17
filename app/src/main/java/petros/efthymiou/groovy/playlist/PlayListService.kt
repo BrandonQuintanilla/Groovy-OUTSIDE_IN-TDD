@@ -1,9 +1,9 @@
 package petros.efthymiou.groovy.playlist
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
 import javax.inject.Inject
 
 /**
@@ -11,12 +11,15 @@ import javax.inject.Inject
  */
 class PlayListService @Inject constructor(private val api: PlaylistAPI) {
 
-    suspend fun fetchPlaylists(): Flow<Result<List<Playlist>>> = flow {
+    suspend fun fetchPlaylists(): Flow<Result<List<PlaylistRaw>>> = flow {
         emit(Result.success(api.fetchAllPlaylists()))
-    }.catch {
-        Log.i("TAG", "fetchPlaylists: ${it.message}")
-        emit(Result.failure(RuntimeException("Something went wrong!!")))
+    }.onCompletion {
+        //Log.i("TAG", "fetchPlaylists: COMPLETED")
     }
+        .catch {
+            //Log.i("TAG", "fetchPlaylists: ${it.message}")
+            emit(Result.failure(RuntimeException("Something went wrong!!")))
+        }
 
 
 }
