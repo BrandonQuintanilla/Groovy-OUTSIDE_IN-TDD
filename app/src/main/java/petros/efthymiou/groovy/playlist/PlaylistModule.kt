@@ -1,5 +1,6 @@
 package petros.efthymiou.groovy.playlist
 
+import com.jakewharton.espresso.OkHttp3IdlingResource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,6 +12,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * Created by Brandon Quintanilla on Nov/15/2022
  */
+
+val client = OkHttpClient()
+val idlingResource = OkHttp3IdlingResource.create("okhttp", client)
+
+
 @Module
 @InstallIn(FragmentComponent::class)
 class PlaylistModule {
@@ -19,7 +25,7 @@ class PlaylistModule {
     fun retrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://192.168.1.4:2999/")// please check local ip
-            .client(OkHttpClient())
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
