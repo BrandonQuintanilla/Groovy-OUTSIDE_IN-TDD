@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_playlist.*
+import kotlinx.android.synthetic.main.fragment_playlist.view.*
 import petros.efthymiou.groovy.R
 import javax.inject.Inject
 
@@ -30,9 +32,16 @@ class PlayListFragment : Fragment() {
 
         setupViewModel()
 
+        viewModel.loader.observe(this){ loading->
+            when(loading){
+                true-> loader.visibility = View.VISIBLE
+                false-> loader.visibility = View.GONE
+            }
+        }
+
         viewModel.playlist.observe(this) { playlist ->
             if (playlist.getOrNull() != null) {
-                setupList(view, playlist.getOrNull()!!)
+                setupList(view.playlist_list, playlist.getOrNull()!!)
             } else {
                 //TODO
             }

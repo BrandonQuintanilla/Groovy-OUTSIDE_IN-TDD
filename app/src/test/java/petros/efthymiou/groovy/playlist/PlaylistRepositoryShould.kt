@@ -38,10 +38,10 @@ class PlaylistRepositoryShould : BaseUnitTest() {
     @Test
     fun propagateErrors() = runBlockingTest {
         val repository = mockFailureCase()
-        assertEquals(exception,repository.getPlayList().first().exceptionOrNull())
+        assertEquals(exception, repository.getPlayList().first().exceptionOrNull())
     }
 
-    private fun mockFailureCase(): PlaylistRepository {
+    private suspend fun mockFailureCase(): PlaylistRepository {
         whenever(service.fetchPlaylists())
             .thenReturn(flow {
                 emit(Result.failure<List<Playlist>>(exception))
@@ -52,7 +52,7 @@ class PlaylistRepositoryShould : BaseUnitTest() {
     }
 
     //Utils
-    private fun mockSuccessfulCase(): PlaylistRepository {
+    private suspend fun mockSuccessfulCase(): PlaylistRepository {
         whenever(service.fetchPlaylists()).thenReturn(flow {
             emit(Result.success(playlist))
         })

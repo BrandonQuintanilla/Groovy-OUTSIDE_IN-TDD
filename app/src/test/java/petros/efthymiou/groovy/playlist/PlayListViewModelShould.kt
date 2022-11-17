@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import petros.efthymiou.groovy.utils.BaseUnitTest
+import petros.efthymiou.groovy.utils.captureValues
 import petros.efthymiou.groovy.utils.getValueForTest
 
 /**
@@ -44,22 +45,39 @@ class PlayListViewModelShould : BaseUnitTest() {
     }
 
     @Test
-    fun emitErrorWhenReceiveError() {
-
-        runBlockingTest {
-            whenever(repository.getPlayList()).thenReturn(
-                flow {
-                    emit(Result.failure<List<Playlist>>(exception))
-                }
-            )
-        }
-        val viewModel = PlayLisViewModel(repository)
+    fun emitErrorWhenReceiveError() = runBlockingTest {
+        val viewModel = mockErrorCase()
         assertEquals(exception, viewModel.playlist.getValueForTest()!!.exceptionOrNull())
-        //Fails
-        // assertEquals(RuntimeException("Another one"), viewModel.playlist.getValueForTest()!!.exceptionOrNull())
     }
 
-    // Util
+    @Test
+    fun closeLoaderAfterPlayListsLoad() = runBlockingTest {
+        val viewmodel = mocksuccessfulCase()
+        viewmodel.loader.captureValues {
+            viewmodel.playlist.getValueForTest()
+            assertEquals(false, values.last())
+        }
+    }
+
+    @Test
+    fun closeLoaderAfterError() = runBlockingTest {
+        val viewmodel = mockErrorCase()
+        viewmodel.loader.captureValues {
+            viewmodel.playlist.getValueForTest()
+            assertEquals(false, values.last())
+        }
+    }
+
+    @Test
+    fun showSpinnerWhileLoading() = runBlockingTest {
+        val viewModel = mocksuccessfulCase()
+        viewModel.loader.captureValues {
+            viewModel.playlist.getValueForTest()
+            assertEquals(true, values[0])
+        }
+    }
+
+    //vm cases
     private fun mocksuccessfulCase(): PlayLisViewModel {
         runBlockingTest {
             whenever(repository.getPlayList()).thenReturn(flow {
@@ -67,6 +85,18 @@ class PlayListViewModelShould : BaseUnitTest() {
             })
         }
         //
+        val viewModel = PlayLisViewModel(repository)
+        return viewModel
+    }
+
+    private fun mockErrorCase(): PlayLisViewModel {
+        runBlockingTest {
+            whenever(repository.getPlayList()).thenReturn(
+                flow {
+                    emit(Result.failure<List<Playlist>>(exception))
+                }
+            )
+        }
         val viewModel = PlayLisViewModel(repository)
         return viewModel
     }

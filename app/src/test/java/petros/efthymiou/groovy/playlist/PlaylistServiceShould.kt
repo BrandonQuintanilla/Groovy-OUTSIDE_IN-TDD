@@ -44,13 +44,13 @@ class PlaylistServiceShould : BaseUnitTest() {
     }
 
     //mock cases
-    private fun mockErrorCase() {
+    private suspend fun mockErrorCase() {
         whenever(api.fetchAllPlaylists())
             .thenThrow(RuntimeException("Damn backend"))
         service = PlayListService(api)
     }
 
-    private fun mockSuccessfulCase() {
+    private suspend fun mockSuccessfulCase() {
         whenever(api.fetchAllPlaylists()).thenReturn(playlists)
         service = PlayListService(api)
     }
