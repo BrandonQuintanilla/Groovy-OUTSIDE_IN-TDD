@@ -8,8 +8,7 @@ class PlaylistDetailsService @Inject constructor(private val api: PlaylistDetail
 
     fun fetchPlaylistDetails(id: String): Flow<Result<PlaylistDetails>> {
         return flow {
-            api.fetchPlaylistDetails(id)
-            emit(Result.success(PlaylistDetails("","","")))
+            emit(Result.success(api.fetchPlaylistDetails(id)))
         }
     }
 

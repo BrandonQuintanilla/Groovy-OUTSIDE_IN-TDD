@@ -3,8 +3,8 @@ package petros.efthymiou.groovy.details
 import javax.inject.Inject
 
 class PlaylistDetailsAPI @Inject constructor() {
-    fun fetchPlaylistDetails(id: String) {
-
+    suspend fun fetchPlaylistDetails(id: String): PlaylistDetails {
+        TODO()
     }
 
 
