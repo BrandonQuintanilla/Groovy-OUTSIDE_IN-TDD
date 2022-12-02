@@ -4,12 +4,14 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import junit.framework.TestCase
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 import petros.efthymiou.groovy.utils.BaseUnitTest
+import petros.efthymiou.groovy.utils.captureValues
 import petros.efthymiou.groovy.utils.getValueForTest
 
 /**
@@ -17,7 +19,7 @@ import petros.efthymiou.groovy.utils.getValueForTest
  */
 class PlayListDetailsViewModelShould : BaseUnitTest() {
 
-    lateinit var viewmodel: PlayListDetailViewModel
+    lateinit var viewModel: PlayListDetailViewModel
     private val id = "1"
     private val service: PlaylistDetailsService = mock()
     private val playlistDetails: PlaylistDetails = mock()
@@ -28,36 +30,44 @@ class PlayListDetailsViewModelShould : BaseUnitTest() {
     @Test
     fun getPlaylistDetailsFromService() = runBlockingTest {
         mockSuccessfulCase()
-        viewmodel.playlistDetails.getValueForTest()
+        viewModel.playlistDetails.getValueForTest()
         verify(service, times(1)).fetchPlaylistDetails(id)
     }
 
     @Test
     fun emitPlayListDetailsFromService() = runBlockingTest {
         mockSuccessfulCase()
-        assertEquals(expected, viewmodel.playlistDetails.getValueForTest())
+        assertEquals(expected, viewModel.playlistDetails.getValueForTest())
     }
 
     @Test
     fun emitErrorWhenServiceFails() = runBlockingTest {
 
         whenever(service.fetchPlaylistDetails(id)).thenReturn(flow {
-                emit(error)
-            })
+            emit(error)
+        })
 
-        viewmodel = PlayListDetailViewModel(service)
-        viewmodel.getPlaylistDetails(id)
+        viewModel = PlayListDetailViewModel(service)
+        viewModel.getPlaylistDetails(id)
 
-        assertEquals(error,viewmodel.playlistDetails.getValueForTest())
+        assertEquals(error, viewModel.playlistDetails.getValueForTest())
     }
 
+    @Test
+    fun showSpinnerWhileLoading() = runBlockingTest {
+        mockSuccessfulCase()
+        viewModel.loader.captureValues {
+            viewModel.playlistDetails.getValueForTest()
+            TestCase.assertEquals(true, values[0])
+        }
+    }
 
     private suspend fun mockSuccessfulCase() {
         whenever(service.fetchPlaylistDetails(id)).thenReturn(flow {
             emit(expected)
         })
-        viewmodel = PlayListDetailViewModel(service)
-        viewmodel.getPlaylistDetails(id)
+        viewModel = PlayListDetailViewModel(service)
+        viewModel.getPlaylistDetails(id)
     }
 
 

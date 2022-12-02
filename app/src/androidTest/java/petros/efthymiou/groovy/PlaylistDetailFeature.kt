@@ -13,17 +13,26 @@ import org.junit.Test
 class PlaylistDetailFeature : BaseUITest() {
 
     @Test
-    fun displayPlaylistNameAndDetails(){
-        Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.playlist_image),
-                ViewMatchers.isDescendantOfA(nthChildOf(ViewMatchers.withId(R.id.playlist_list), 0))
-            )
-        ).perform(ViewActions.click())
+    fun displayPlaylistNameAndDetails() {
+        navigateToPlaylistDetails()
 
         assertDisplayed("Hard Rock Cafe")
         assertDisplayed("Rock your senses with this timeless signature vibe list. \n\n • Poison \n • You shook me all night \n • Zombie \n • Rock'n Me \n • Thunderstruck \n • I Hate Myself for Loving you \n • Crazy \n • Knockin' on Heavens Door")
 
     }
 
+    @Test
+    fun displaysLoaderWhileFetchingThePlaylistDetails() {
+        navigateToPlaylistDetails()
+        assertDisplayed(R.id.details_loader)
+    }
+
+    private fun navigateToPlaylistDetails() {
+        Espresso.onView(
+            Matchers.allOf(
+                ViewMatchers.withId(R.id.playlist_image),
+                ViewMatchers.isDescendantOfA(nthChildOf(ViewMatchers.withId(R.id.playlist_list), 0))
+            )
+        ).perform(ViewActions.click())
+    }
 }

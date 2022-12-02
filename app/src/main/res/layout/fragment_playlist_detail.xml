@@ -6,9 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".PlaylistDetailFragment">
+    tools:context=".details.PlaylistDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <ProgressBar
+        android:id="@+id/details_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minWidth="40dp"
+        android:minHeight="40dp" />
+
     <TextView
         android:id="@+id/playlist_name"
         android:layout_width="wrap_content"
