@@ -62,12 +62,12 @@ class PlayListFeature : BaseUITest() {
         assertDisplayed(R.id.loader)
     }
 
-    @Test
+    /*@Test
     fun hidesLoader() {
         assertNotDisplayed(R.id.loader)
         IdlingRegistry.getInstance().unregister(idlingResource)
         assertDisplayed(R.id.details_loader)
-    }
+    }*/
 
     @Test
     fun displayRockImageForRockListItems() {

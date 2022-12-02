@@ -30,6 +30,7 @@ class PlayListDetailsViewModelShould : BaseUnitTest() {
     @Test
     fun getPlaylistDetailsFromService() = runBlockingTest {
         mockSuccessfulCase()
+        viewModel.getPlaylistDetails(id)
         viewModel.playlistDetails.getValueForTest()
         verify(service, times(1)).fetchPlaylistDetails(id)
     }
@@ -37,6 +38,7 @@ class PlayListDetailsViewModelShould : BaseUnitTest() {
     @Test
     fun emitPlayListDetailsFromService() = runBlockingTest {
         mockSuccessfulCase()
+        viewModel.getPlaylistDetails(id)
         assertEquals(expected, viewModel.playlistDetails.getValueForTest())
     }
 
@@ -54,11 +56,22 @@ class PlayListDetailsViewModelShould : BaseUnitTest() {
     }
 
     @Test
-    fun showSpinnerWhileLoading() = runBlockingTest {
+    fun showLoaderWhileLoading() = runBlockingTest {
         mockSuccessfulCase()
         viewModel.loader.captureValues {
+            viewModel.getPlaylistDetails(id)
             viewModel.playlistDetails.getValueForTest()
             TestCase.assertEquals(true, values[0])
+        }
+    }
+
+    @Test
+    fun closeLoaderAfterPlaylistDetailsLoad() = runBlockingTest {
+        mockSuccessfulCase()
+        viewModel.loader.captureValues {
+            viewModel.getPlaylistDetails(id)
+            viewModel.playlistDetails.getValueForTest()
+            TestCase.assertEquals(false, values.last())
         }
     }
 
@@ -67,7 +80,6 @@ class PlayListDetailsViewModelShould : BaseUnitTest() {
             emit(expected)
         })
         viewModel = PlayListDetailViewModel(service)
-        viewModel.getPlaylistDetails(id)
     }
 
 

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_playlist_detail.*
 import petros.efthymiou.groovy.R
 import javax.inject.Inject
@@ -44,7 +44,7 @@ class PlaylistDetailFragment : Fragment() {
             if (playlistDetails.getOrNull() != null) {
                 setupUI(playlistDetails)
             } else {
-                //TODO
+                Snackbar.make(playlist_details_root, R.string.generic_error, Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -53,7 +53,7 @@ class PlaylistDetailFragment : Fragment() {
         viewModel.loader.observe(this) { loading ->
             when (loading) {
                 true -> details_loader.visibility = View.VISIBLE
-                false -> details_loader.visibility = View.GONE
+                else -> details_loader.visibility = View.GONE
             }
         }
     }
