@@ -18,10 +18,6 @@ import org.junit.Test
  */
 class PlayListFeature : BaseUITest() {
 
-    //Indicates that the test has to target MainActivity
-    val mActivity = ActivityTestRule(MainActivity::class.java)
-        @Rule get
-
     @Test
     fun displayScreenTitle() {
         // Context of the app under test.

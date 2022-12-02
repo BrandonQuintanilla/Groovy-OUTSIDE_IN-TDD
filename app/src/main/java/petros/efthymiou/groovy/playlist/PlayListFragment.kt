@@ -32,14 +32,22 @@ class PlayListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_playlist, container, false)
 
         setupViewModel()
+        observeLoader()
+        observePlaylists(view)
 
-        viewModel.loader.observe(this){ loading->
-            when(loading){
-                true-> loader.visibility = View.VISIBLE
-                false-> loader.visibility = View.GONE
+        return view
+    }
+
+    private fun observeLoader() {
+        viewModel.loader.observe(this) { loading ->
+            when (loading) {
+                true -> loader.visibility = View.VISIBLE
+                false -> loader.visibility = View.GONE
             }
         }
+    }
 
+    private fun observePlaylists(view: View) {
         viewModel.playlist.observe(this) { playlist ->
             if (playlist.getOrNull() != null) {
                 setupList(view.playlist_list, playlist.getOrNull()!!)
@@ -47,8 +55,6 @@ class PlayListFragment : Fragment() {
                 //TODO
             }
         }
-
-        return view
     }
 
     private fun setupList(
