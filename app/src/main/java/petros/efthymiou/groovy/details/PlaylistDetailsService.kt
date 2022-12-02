@@ -1,11 +1,12 @@
 package petros.efthymiou.groovy.details
 
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PlaylistDetailsService @Inject constructor() {
 
-    fun fetchPlaylistDetails(i: String) {
-
+    suspend fun fetchPlaylistDetails(i: String): Flow<Result<PlaylistDetails>> {
+        TODO()
     }
 
 }
