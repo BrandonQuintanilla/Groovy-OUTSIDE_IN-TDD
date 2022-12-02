@@ -20,6 +20,8 @@ class PlaylistDetailsServiceShould : BaseUnitTest() {
     private val api: PlaylistDetailsAPI = mock()
     private val playlistDetails: PlaylistDetails = mock()
 
+    private val exception = RuntimeException("Damn backend, API message")
+
     @Test
     fun fetchPlaylistDetailsFromAPI() = runBlockingTest {
         mockSuccessfulCase()
@@ -34,6 +36,20 @@ class PlaylistDetailsServiceShould : BaseUnitTest() {
     fun convertValuesToFlowResultAndEmitThem() = runBlockingTest {
         mockSuccessfulCase()
         assertEquals(Result.success(playlistDetails), service.fetchPlaylistDetails(id).single())
+    }
+
+    @Test
+    fun emitErrorResultWhenNetworkFails() = runBlockingTest {
+        mockErrorCase()
+        assertEquals(
+            "Damn backend",
+            service.fetchPlaylistDetails(id).single().exceptionOrNull()?.message
+        )
+    }
+
+    private suspend fun mockErrorCase() {
+        whenever(api.fetchPlaylistDetails(id)).thenThrow(exception)
+        service = PlaylistDetailsService(api)
     }
 
     private suspend fun mockSuccessfulCase() {
