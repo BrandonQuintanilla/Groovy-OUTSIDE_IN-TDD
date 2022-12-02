@@ -25,20 +25,23 @@ class PlayListDetailsViewModelShould : BaseUnitTest() {
 
     @Test
     fun getPlaylistDetailsFromService() = runBlockingTest {
-        viewmodel = PlayListDetailViewModel(service)
-        viewmodel.getPlaylistDetails(id)
+        mockSuccessfulCase()
         viewmodel.playlistDetails.getValueForTest()
         verify(service, times(1)).fetchPlaylistDetails(id)
     }
 
     @Test
     fun emitPlayListDetailsFromService() = runBlockingTest {
+        mockSuccessfulCase()
+        assertEquals(expected, viewmodel.playlistDetails.getValueForTest())
+    }
+
+    private suspend fun mockSuccessfulCase() {
         whenever(service.fetchPlaylistDetails(id)).thenReturn(flow {
             emit(expected)
         })
         viewmodel = PlayListDetailViewModel(service)
         viewmodel.getPlaylistDetails(id)
-        assertEquals(expected, viewmodel.playlistDetails.getValueForTest())
     }
 
 
