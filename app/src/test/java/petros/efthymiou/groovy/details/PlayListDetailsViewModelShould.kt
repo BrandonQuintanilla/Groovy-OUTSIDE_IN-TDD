@@ -22,6 +22,8 @@ class PlayListDetailsViewModelShould : BaseUnitTest() {
     private val service: PlaylistDetailsService = mock()
     private val playlistDetails: PlaylistDetails = mock()
     private val expected = Result.success(playlistDetails)
+    private val exception = RuntimeException("Something went wrong")
+    private val error = Result.failure<PlaylistDetails>(exception)
 
     @Test
     fun getPlaylistDetailsFromService() = runBlockingTest {
@@ -35,6 +37,20 @@ class PlayListDetailsViewModelShould : BaseUnitTest() {
         mockSuccessfulCase()
         assertEquals(expected, viewmodel.playlistDetails.getValueForTest())
     }
+
+    @Test
+    fun emitErrorWhenServiceFails() = runBlockingTest {
+
+        whenever(service.fetchPlaylistDetails(id)).thenReturn(flow {
+                emit(error)
+            })
+
+        viewmodel = PlayListDetailViewModel(service)
+        viewmodel.getPlaylistDetails(id)
+
+        assertEquals(error,viewmodel.playlistDetails.getValueForTest())
+    }
+
 
     private suspend fun mockSuccessfulCase() {
         whenever(service.fetchPlaylistDetails(id)).thenReturn(flow {
